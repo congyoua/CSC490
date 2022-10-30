@@ -6,7 +6,7 @@ from torch import nn
 import numpy as np
 import datetime
 from models import OCRNet
-from losses import LovaszSoftmax, LossWrapper, TwoScaleLoss
+from losses import LovaszSoftmax, LossWrapper, TwoScaleLoss, GenDiceLoss
 
 
 class OCRNetManager(BaseManager):

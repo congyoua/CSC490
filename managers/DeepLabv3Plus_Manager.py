@@ -6,7 +6,7 @@ from torch import nn
 import numpy as np
 import datetime
 from models import DeepLabv3Plus
-from losses import LossWrapper, LovaszSoftmax
+from losses import LossWrapper, LovaszSoftmax, GenDiceLoss
 
 
 class DeepLabv3PlusManager(BaseManager):
@@ -82,6 +82,7 @@ class DeepLabv3PlusManager(BaseManager):
                 loss = self.loss(proj_features, output, lbl.long())
             else:
                 output = self.model(img.float())
+
                 loss = self.loss(output, lbl.long())
             # backward
             loss.backward()
