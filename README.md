@@ -9,3 +9,5 @@ Surgical tray videos had a duration of 11 minutes and 3 s on average (minimum: 6
 In total, more than nine hours of surgery (for each video type) have been video recorded. For more details about the dataset and the different tasks proposed. For CATARACTS 2018, in addition to the videos, we provide the images (images.zip) used in the challenge and the ground truth.
 
 Reference: https://ieee-dataport.org/open-access/cataracts
+
+# Current steps
