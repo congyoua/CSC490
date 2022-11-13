@@ -6,7 +6,7 @@ from torch import nn
 import numpy as np
 import datetime
 from models import DeepLabv3Plus
-from losses import LossWrapper, LovaszSoftmax, GenDiceLoss
+from losses import *
 
 
 class DeepLabv3PlusManager(BaseManager):

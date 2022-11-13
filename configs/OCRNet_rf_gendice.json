@@ -1,5 +1,5 @@
 {
-  "name": "OCRNet_r50_RF_Lovasz",
+  "name": "OCRNet_r50_RF_GenDice",
   "mode": "training",
   "manager": "OCRNet",
   "graph": {
@@ -28,11 +28,11 @@
   },
 
   "train": {
-    "learning_rate": 0.0001,
+    "learning_rate": 0.001,
     "lr_decay_gamma": 0.96,
-    "epochs": 50
+    "epochs": 20
   },
-  "log_every_n_epochs": 25,
+  "log_every_n_epochs": 10,
   "cuda": true,
   "gpu_device": 0,
   "seed": 0

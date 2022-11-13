@@ -1,5 +1,5 @@
 {
-  "name": "DeepLabv3Plus_r50_RF_Lovasz",
+  "name": "DeepLabv3Plus_r50_RF_GenDiceLoss",
   "mode": "training",
   "manager": "DeepLabv3Plus",
   "graph": {
@@ -17,7 +17,7 @@
     "blacklist": false,
     "transforms": ["pad", "flip", "blur", "colorjitter"],
     "split": 2,
-    "batch_size": 2,
+    "batch_size": 4,
     "repeat_factor": [0],
     "repeat_factor_freq_thresh": 0.15
   },
@@ -25,11 +25,11 @@
   "loss": {"name":  "GenDiceLoss"},
 
   "train": {
-    "learning_rate": 0.0001,
+    "learning_rate": 0.001,
     "lr_decay_gamma": 0.96,
-    "epochs": 50
+    "epochs": 20
   },
-  "log_every_n_epochs": 25,
+  "log_every_n_epochs": 10,
   "cuda": true,
   "gpu_device": 0,
   "seed": 0
