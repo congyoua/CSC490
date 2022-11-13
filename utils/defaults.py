@@ -229,6 +229,7 @@ classes_exp3 = {
     255: "Ignore",
 }
 
+
 CLASS_INFO = [
     [class_remapping_exp0, classes_exp0, categories_exp0],  # Original classes
     [class_remapping_exp1, classes_exp1, categories_exp1],

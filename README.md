@@ -10,4 +10,46 @@ In total, more than nine hours of surgery (for each video type) have been video 
 
 Reference: https://ieee-dataport.org/open-access/cataracts
 
+
+
+# Presentation steps
+
+1. Data
+    - Background
+    - CADIS Dataset(image sampled from cataract surgery with segmentation) 
+    - Data sample
+      - Original img, segmented img
+    - Classes
+      - anatomical, instrument, others
+2. Model
+    - Model we are using
+      - Encoder - Decoder
+    - Data preprocessing : transformations (fenda)
+    - Model they have and performance
+    - Loss function
+    - Current update: CEL-Dice
+      - Performance
+    - Our trained result 
+      - DLV3, OCR, OCR + CEL-Dice
+      - Accuracy table
+      - Confusion matrix (zijin liao)
+      - What's the problem with current method?
+3. Next step:
+   - Change decoder
+   - Change backbone
+   - Focus on the class with not enough label
+- 
+   
+
+
 # Current steps
+
+
+## 1. FWIoU
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9871673
+
+## 2. CEL-Dice
+https://arxiv.org/pdf/1909.10360v3.pdf
+
+## 3. New model - RAUNet
+https://github.com/nizhenliang/RAUNet

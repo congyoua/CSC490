@@ -2,6 +2,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 from utils import CLASS_INFO
 from losses.DiceFocalLoss import MonaiDiceFocalLoss
+from losses import OhemCrossEntropy, LovaszSoftmax, GenDiceLoss
 from torch.nn import CrossEntropyLoss
 
 
