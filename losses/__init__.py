@@ -5,4 +5,5 @@ from .GenDiceLoss import GenDiceLoss
 from .OhemCrossEntropy import OhemCrossEntropy
 from .TwoScaleLoss import TwoScaleLoss
 from .SemiSupervisedLoss import SemiSupervisedLoss
+from .DiceFocalLoss import MonaiDiceFocalLoss
 from .LossWrapper import LossWrapper

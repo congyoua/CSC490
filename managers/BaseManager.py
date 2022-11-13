@@ -20,7 +20,7 @@ from models import *
 from losses import *
 from utils import DATA_SPLITS, CLASS_INFO, OVERSAMPLING_PRESETS, parse_transform_list, get_class_info, \
     AdaptiveBatchSampler, RepeatFactorSampler, LRFcts, mask_to_colormap, get_remapped_colormap, \
-    t_get_mean_iou, t_get_confusion_matrix, to_comb_image, to_numpy, worker_init_fn
+    t_get_mean_iou, t_get_confusion_matrix, to_comb_image, to_numpy, worker_init_fn, t_normalise_confusion_matrix, get_matrix_fig
 
 
 class BaseManager:
@@ -685,6 +685,14 @@ class BaseManager:
         self.valid_writer.add_scalar('metrics/mean_iou_instruments', m_iou_instruments, self.global_step)
         self.valid_writer.add_scalar('metrics/mean_iou_rare', m_iou_rare, self.global_step)
         print("\n miou:{:.4f} - miou-instruments{:.4f} - miou-anatomies{:.4f} - miou-rare{:.4f}".format(m_iou, m_iou_instruments, m_iou_anatomies, m_iou_rare))
+        row_confusion_matrix = t_normalise_confusion_matrix(confusion_matrix, 'row')
+        col_confusion_matrix = t_normalise_confusion_matrix(confusion_matrix, 'col')
+        self.valid_writer.add_figure('infer_confusion_matrix/row_normalised',
+                                     get_matrix_fig(to_numpy(row_confusion_matrix), self.config['data']['experiment']),
+                                     0)
+        self.valid_writer.add_figure('infer_confusion_matrix/col_normalised',
+                                     get_matrix_fig(to_numpy(col_confusion_matrix), self.config['data']['experiment']),
+                                     0)
         self.valid_writer.close()
 
     def demo_infer(self):

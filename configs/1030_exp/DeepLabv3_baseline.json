@@ -1,13 +1,14 @@
 {
-  "name": "OCRNet_r50_RF_Lovasz",
+  "name": "DeepLabv3Plus_r50_baseline",
   "mode": "training",
-  "manager": "OCRNet",
+  "manager": "DeepLabv3Plus",
   "graph": {
-    "model": "OCRNet",
+    "model": "DeepLabv3Plus",
     "backbone": "resnet50",
+    "aspp": {"channels": 256},
     "out_stride": 8,
     "pretrained": true,
-    "ss_pretrained__":"moco"
+    "ss_pretrained_":"moco"
   },
 
   "data": {
@@ -16,16 +17,10 @@
     "blacklist": false,
     "transforms": ["pad", "flip", "blur", "colorjitter"],
     "split": 2,
-    "batch_size": 8,
-    "repeat_factor": [0],
-    "repeat_factor_freq_thresh": 0.15
+    "batch_size": 2
   },
 
-  "loss": {
-    "name": "TwoScaleLoss",
-    "interm": {"name": "LovaszSoftmax", "args": [], "weight": 0.4},
-    "final":  {"name":  "LovaszSoftmax", "args": [], "weight": 1.0}
-  },
+  "loss": {"name":  "OhemCrossEntropy"},
 
   "train": {
     "learning_rate": 0.0001,

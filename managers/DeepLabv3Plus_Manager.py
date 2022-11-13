@@ -6,7 +6,7 @@ from torch import nn
 import numpy as np
 import datetime
 from models import DeepLabv3Plus
-from losses import LossWrapper, LovaszSoftmax
+from losses import *
 
 
 class DeepLabv3PlusManager(BaseManager):
@@ -68,6 +68,8 @@ class DeepLabv3PlusManager(BaseManager):
         a = datetime.datetime.now()
         running_confusion_matrix = 0
         for batch_num, (img, lbl, metadata) in enumerate(self.data_loaders[self.train_schedule[self.epoch]]):
+            if batch_num % 1000 == 0:
+                self.validate()
             b = (datetime.datetime.now() - a).total_seconds() * 1000
             a = datetime.datetime.now()
             img, lbl = img.to(self.device), lbl.to(self.device)
@@ -82,7 +84,20 @@ class DeepLabv3PlusManager(BaseManager):
                 loss = self.loss(proj_features, output, lbl.long())
             else:
                 output = self.model(img.float())
-                loss = self.loss(output, lbl.long())
+                if isinstance(self.loss, MonaiDiceFocalLoss):
+                    onehot_lbl = lbl[:, None, :, :]
+                    if self.config['data']['experiment'] == 2:
+                        num_class = 17
+                    if self.config['data']['experiment'] == 1:
+                        num_class = 7
+                    if self.config['data']['experiment'] == 3:
+                        num_class = 25
+                    one_hot = torch.zeros(lbl.shape[0], 255, lbl.shape[1], lbl.shape[2]).to(self.device)
+                    one_hot.scatter_(1, onehot_lbl.type(torch.int64), 1)
+                    onehot_lbl = one_hot[:, :num_class]
+                    loss = self.loss(output, onehot_lbl.long())
+                else:
+                    loss = self.loss(output, lbl.long())
             # backward
             loss.backward()
             self.optimiser.step()
@@ -152,7 +167,20 @@ class DeepLabv3PlusManager(BaseManager):
                         individual_losses[key] += self.loss.loss_vals[key]
                 else:
                     output = self.model(img.float())
-                    valid_loss += self.loss(output, lbl.long()).item()
+                    if isinstance(self.loss, MonaiDiceFocalLoss):
+                        onehot_lbl = lbl[:, None, :, :]
+                        if self.config['data']['experiment'] == 2:
+                            num_class = 17
+                        if self.config['data']['experiment'] == 1:
+                            num_class = 7
+                        if self.config['data']['experiment'] == 3:
+                            num_class = 25
+                        one_hot = torch.zeros(lbl.shape[0], 255, lbl.shape[1], lbl.shape[2]).to(self.device)
+                        one_hot.scatter_(1, onehot_lbl.type(torch.int64), 1)
+                        onehot_lbl = one_hot[:, :num_class]
+                        loss = self.loss(output, onehot_lbl.long())
+                    else:
+                        valid_loss += self.loss(output, lbl.long()).item()
                 confusion_matrix = t_get_confusion_matrix(output, lbl, confusion_matrix)
 
                 if rec_num in np.round(np.linspace(0, len(self.data_loaders['valid_loader']) - 1, self.max_valid_imgs)):

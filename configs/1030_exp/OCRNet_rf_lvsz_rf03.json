@@ -16,15 +16,15 @@
     "blacklist": false,
     "transforms": ["pad", "flip", "blur", "colorjitter"],
     "split": 2,
-    "batch_size": 8,
+    "batch_size": 2,
     "repeat_factor": [0],
-    "repeat_factor_freq_thresh": 0.15
+    "repeat_factor_freq_thresh": 0.3
   },
 
   "loss": {
     "name": "TwoScaleLoss",
-    "interm": {"name": "LovaszSoftmax", "args": [], "weight": 0.4},
-    "final":  {"name":  "LovaszSoftmax", "args": [], "weight": 1.0}
+    "interm": {"name": "MonaiDiceFocalLoss", "args": [], "weight": 0.4},
+    "final":  {"name":  "MonaiDiceFocalLoss", "args": [], "weight": 1.0}
   },
 
   "train": {
