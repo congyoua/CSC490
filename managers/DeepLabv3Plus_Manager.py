@@ -20,11 +20,13 @@ class DeepLabv3PlusManager(BaseManager):
         print("Using model '{}' with backbone '{}' with output stride {} : trainable parameters {}"
               .format(self.config['graph']['model'], self.config['graph']['backbone'],  self.model.out_stride,
                       num_train_params))
+        '''
         if 'graph' in self.config:
             # todo change config of upernet to have all model architecture info under 'graph' -- to avoid ifs
             if 'ss_pretrained' in self.config['graph']:
                 if self.config['graph']['ss_pretrained']:
                     self.load_ss_pretrained()
+        '''
 
     # def load_optimiser(self):
     #     """Set optimiser and if required, learning rate schedule"""
