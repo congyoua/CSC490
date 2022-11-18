@@ -14,4 +14,3 @@ from .UNet import UNet
 from .Ensemble import Ensemble
 from .Projector import Projector
 from .EncDec import EncDec
-from .vits import *

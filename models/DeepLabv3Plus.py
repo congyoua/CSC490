@@ -3,7 +3,6 @@ from torch import nn
 from torch.nn import functional as F
 from utils.utils import CLASS_INFO
 from torchvision.models import resnet50, resnet101
-
 from torchvision.models._utils import IntermediateLayerGetter
 from models.Projector import Projector
 
@@ -33,8 +32,8 @@ class DeepLabv3Plus(nn.Module):
         self.backbone_cutoff = {'layer1': 'low', 'layer4': 'high'}
         resnet_pretrained = True if 'pretrained' not in config else config['pretrained']
         if self.backbone_name == 'resnet50':
-            vit = 
-            self.backbone = IntermediateLayerGetter(vit, return_layers=self.backbone_cutoff)
+            resnet = resnet50(pretrained=resnet_pretrained, replace_stride_with_dilation=striding)
+            self.backbone = IntermediateLayerGetter(resnet, return_layers=self.backbone_cutoff)
             self.high_level_channels = self.backbone['layer4']._modules['2'].conv3.out_channels
             self.low_level_channels = self.backbone['layer1']._modules['2'].conv3.out_channels
         elif self.backbone_name == 'resnet101':
