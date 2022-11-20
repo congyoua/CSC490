@@ -1,0 +1,31 @@
+{
+  "name": "SegFormer_RF_Lovasz",
+  "mode": "training",
+  "manager": "SegFormer",
+  "graph": {
+    "model": "SegFormer"
+  },
+
+  "data": {
+    "experiment": 2,
+    "use_relabeled": false,
+    "blacklist": false,
+    "transforms": ["trivialAugment"],
+    "split": 2,
+    "batch_size": 8,
+    "repeat_factor": [0],
+    "repeat_factor_freq_thresh": 0.15
+  },
+
+  "loss": {"name":  "LovaszSoftmax"},
+
+  "train": {
+    "learning_rate": 0.0001,
+    "lr_decay_gamma": 0.96,
+    "epochs": 20
+  },
+  "log_every_n_epochs": 10,
+  "cuda": true,
+  "gpu_device": 0,
+  "seed": 0
+}
