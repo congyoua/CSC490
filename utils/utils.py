@@ -3,7 +3,8 @@ import os
 import pathlib
 import json
 import torch
-from torchvision.transforms import ToPILImage, ColorJitter, ToTensor, Normalize, RandomApply
+from torchvision.transforms import ToPILImage, ColorJitter, ToTensor, Normalize, RandomApply, AutoAugment, RandAugment, TrivialAugmentWide
+from torchvision.transforms.autoaugment import AutoAugmentPolicy
 from utils import PadNP, FlipNP, AffineNP, BlurPIL, CropNP, CLASS_INFO, DEFAULT_CONFIG_DICT, DEFAULT_CONFIG_NESTED_DICT
 import pandas as pd
 import numpy as np
@@ -402,13 +403,19 @@ def parse_transform_list(transform_list, transform_values, num_classes):
     # PIL Image: needed for training images if some of the pytorch transform functions are present
     pil_needed = False
     for t in transform_list:
-        if t in ['colorjitter', 'blur']:  # Add other keywords for fcts that need pil.Image input here
+        if t in ['colorjitter', 'blur', 'autoAugment', 'randAugment', 'trivialAugment']:  # Add other keywords for fcts that need pil.Image input here
             pil_needed = True
     if pil_needed:
         transforms_dict['train']['img'].append(ToPILImage())
 
     # ColorJitter only applied on training images
     #   Input: pil.Image; Output: pil.Image
+    if 'autoAugment' in transform_list:
+        transforms_dict['train']['img'].append(AutoAugment(AutoAugmentPolicy.CIFAR10))
+    if 'randAugment' in transform_list:
+        transforms_dict['train']['img'].append(RandAugment(2,14))
+    if 'trivialAugment' in transform_list:
+        transforms_dict['train']['img'].append(TrivialAugmentWide())
     if 'blur' in transform_list:
         transforms_dict['train']['img'].append(BlurPIL(probability=.05, kernel_limits=(3, 7)))
 
