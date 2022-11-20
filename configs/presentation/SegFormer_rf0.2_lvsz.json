@@ -1,5 +1,5 @@
 {
-  "name": "SegFormer_RF_Lovasz",
+  "name": "SegFormer_rf0.2_lvsz",
   "mode": "training",
   "manager": "SegFormer",
   "graph": {

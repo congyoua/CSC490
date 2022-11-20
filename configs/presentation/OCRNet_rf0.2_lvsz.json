@@ -1,5 +1,5 @@
 {
-  "name": "OCRNet_r50_RF_Lovasz",
+  "name": "OCRNet_rf0.2_lvsz",
   "mode": "training",
   "manager": "OCRNet",
   "graph": {
@@ -16,7 +16,7 @@
     "blacklist": false,
     "transforms": ["pad", "flip", "blur", "colorjitter"],
     "split": 2,
-    "batch_size": 2,
+    "batch_size": 4,
     "repeat_factor": [0],
     "repeat_factor_freq_thresh": 0.2
   },

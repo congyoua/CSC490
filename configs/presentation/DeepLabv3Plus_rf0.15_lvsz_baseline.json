@@ -1,5 +1,5 @@
 {
-  "name": "DeepLabv3Plus_r50_RF_Lovasz",
+  "name": "DeepLabv3Plus_rf0.15_lvsz_baseline",
   "mode": "training",
   "manager": "DeepLabv3Plus",
   "graph": {
