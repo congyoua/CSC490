@@ -16,7 +16,7 @@
     "blacklist": false,
     "transforms": ["pad", "flip", "blur", "colorjitter"],
     "split": 2,
-    "batch_size": 4,
+    "batch_size": 2,
     "repeat_factor": [0],
     "repeat_factor_freq_thresh": 0.15
   },

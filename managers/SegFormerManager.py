@@ -5,27 +5,27 @@ import torch
 from torch import nn
 import numpy as np
 import datetime
-from models import DeepLabv3Plus
+from models import SegFormer
 from losses import *
 
 
-class DeepLabv3PlusManager(BaseManager):
+class SegFormerManager(BaseManager):
     """Manager for simple img in, lbl out models"""
     def load_model(self):
         """Loads the model into self.model"""
-        model_class = globals()[self.config['graph']['model']]
-        self.model = model_class(config=self.config['graph'], experiment=self.experiment)
-        self.model = self.model.to(self.device)
-        num_train_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
-        print("Using model '{}' with backbone '{}' with output stride {} : trainable parameters {}"
-              .format(self.config['graph']['model'], self.config['graph']['backbone'],  self.model.out_stride,
-                      num_train_params))
-        if 'graph' in self.config:
-            # todo change config of upernet to have all model architecture info under 'graph' -- to avoid ifs
-            if 'ss_pretrained' in self.config['graph']:
-                if self.config['graph']['ss_pretrained']:
-                    self.load_ss_pretrained()
-
+        # model_class = globals()[self.config['graph']['model']]
+        # self.model = model_class(config=self.config['graph'], experiment=self.experiment)
+        # self.model = self.model.to(self.device)
+        # num_train_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+        # print("Using model '{}' with backbone '{}' with output stride {} : trainable parameters {}"
+        #       .format(self.config['graph']['model'], self.config['graph']['backbone'],  self.model.out_stride,
+        #               num_train_params))
+        # if 'graph' in self.config:
+        #     # todo change config of upernet to have all model architecture info under 'graph' -- to avoid ifs
+        #     if 'ss_pretrained' in self.config['graph']:
+        #         if self.config['graph']['ss_pretrained']:
+        #             self.load_ss_pretrained()
+        self.model = SegFormer(config=self.config['graph'], experiment=self.experiment, device=self.device).to(self.device)
     # def load_optimiser(self):
     #     """Set optimiser and if required, learning rate schedule"""
     #     self.optimiser = torch.optim.Adam(self.model.parameters(), lr=self.config['train']['learning_rate'])
@@ -73,7 +73,7 @@ class DeepLabv3PlusManager(BaseManager):
             img, lbl = img.to(self.device), lbl.to(self.device)
             if (self.epoch + self.start_epoch) == 0 and batch_num == 0:  # To add the graph to TensorBoard
                 self.model.eval()
-                self.train_writer.add_graph(self.model, img.float())
+                # self.train_writer.add_graph(self.model, img.float())
                 self.model.train()
             self.optimiser.zero_grad()
             # forward
@@ -82,20 +82,7 @@ class DeepLabv3PlusManager(BaseManager):
                 loss = self.loss(proj_features, output, lbl.long())
             else:
                 output = self.model(img.float())
-                if isinstance(self.loss, MonaiDiceFocalLoss):
-                    onehot_lbl = lbl[:, None, :, :]
-                    if self.config['data']['experiment'] == 2:
-                        num_class = 17
-                    if self.config['data']['experiment'] == 1:
-                        num_class = 7
-                    if self.config['data']['experiment'] == 3:
-                        num_class = 25
-                    one_hot = torch.zeros(lbl.shape[0], 255, lbl.shape[1], lbl.shape[2]).to(self.device)
-                    one_hot.scatter_(1, onehot_lbl.type(torch.int64), 1)
-                    onehot_lbl = one_hot[:, :num_class]
-                    loss = self.loss(output, onehot_lbl.long())
-                else:
-                    loss = self.loss(output, lbl.long())
+                loss = self.loss(output, lbl.long())
             # backward
             loss.backward()
             self.optimiser.step()
@@ -150,9 +137,6 @@ class DeepLabv3PlusManager(BaseManager):
         valid_loss = 0
         confusion_matrix = None
         individual_losses = dict()
-        if self.model.projector_model and isinstance(self.loss, LossWrapper):
-            for key in self.loss.loss_vals:
-                individual_losses[key] = 0
 
         with torch.no_grad():
             for rec_num, (img, lbl, metadata) in enumerate(self.data_loaders['valid_loader']):
@@ -164,7 +148,7 @@ class DeepLabv3PlusManager(BaseManager):
                     for key in self.loss.loss_vals:
                         individual_losses[key] += self.loss.loss_vals[key]
                 else:
-                    output = self.model(img.float())
+                    output = self.model(img)
                     if isinstance(self.loss, MonaiDiceFocalLoss):
                         onehot_lbl = lbl[:, None, :, :]
                         if self.config['data']['experiment'] == 2:
@@ -178,7 +162,7 @@ class DeepLabv3PlusManager(BaseManager):
                         onehot_lbl = one_hot[:, :num_class]
                         loss = self.loss(output, onehot_lbl.long())
                     else:
-                        print(output.shape, lbl.shape)
+                        # print(output.shape, lbl.shape)
                         valid_loss += self.loss(output, lbl.long()).item()
                 confusion_matrix = t_get_confusion_matrix(output, lbl, confusion_matrix)
 

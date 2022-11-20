@@ -57,11 +57,12 @@ class DeepLabv3Plus(nn.Module):
 
     def forward(self, x):
         input_resolution = x.shape[-2:]  # input image resolution (H,W)
+        # print('input_resolution {}'.format(x.shape))
         backbone_features = self.backbone(x)  # ['out']
         # print('high_features {}'.format(backbone_features['high'].size()))
         # print('low_features {}'.format(backbone_features['low'].size()))
         aspp_features = self.aspp.forward(backbone_features['high'])
-        # print('aspp_features {}'.format(aspp_features.size()))
+       # print('aspp_features {}'.format(aspp_features.size()))
         logits = self.decoder(backbone_features['low'], aspp_features)
         # print('logits {}:'.format(logits.size()))
         # print('logits {}:'.format(logits.size()))
@@ -69,6 +70,7 @@ class DeepLabv3Plus(nn.Module):
         # print('upsampled_logits {}:'.format(upsampled_logits.size()))
         if self.projector_model:
             proj_features = self.projector_model(backbone_features['high'])
+            # print('projected feature{}:'.format(proj_features.size()))
             return upsampled_logits, proj_features
         else:
             return upsampled_logits

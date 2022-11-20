@@ -213,8 +213,9 @@ def to_comb_image(img, lbl, lbl_pred, experiment):
 
 
 def get_matrix_fig(matrix, exp_num):
-    labels = [item[1] for item in CLASS_INFO[exp_num][1].items()]
+    labels = ['Null'] + [item[1] for item in CLASS_INFO[exp_num][1].items() if item[0] != 0]
     n = len(labels)
+    print(n)
     fig, ax = plt.subplots(figsize=(.7*n, .7*n))
     im, cbar = heatmap(matrix, labels, labels, ax=ax, cbar_kw={}, cmap="YlGn", cbarlabel="Percentage probability")
     annotate_heatmap(im, valfmt='{x:.2f}', threshold=.6)
@@ -411,7 +412,7 @@ def parse_transform_list(transform_list, transform_values, num_classes):
     # ColorJitter only applied on training images
     #   Input: pil.Image; Output: pil.Image
     if 'autoAugment' in transform_list:
-        transforms_dict['train']['img'].append(AutoAugment(AutoAugmentPolicy.CIFAR10))
+        transforms_dict['train']['img'].append(AutoAugment(AutoAugmentPolicy.IMAGENET))
     if 'randAugment' in transform_list:
         transforms_dict['train']['img'].append(RandAugment(2,14))
     if 'trivialAugment' in transform_list:

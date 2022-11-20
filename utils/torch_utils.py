@@ -238,6 +238,7 @@ def t_get_confusion_matrix(prediction: torch.Tensor, target: torch.Tensor, exist
         # [C, N*H*W] x [N*H*W, C] = [C, C]
         if existing_matrix is not None:
             confusion_matrix += existing_matrix
+        # print(confusion_matrix)
         return confusion_matrix
 
 
@@ -308,7 +309,8 @@ def t_get_miou(confusion_matrix: torch.Tensor, experiment: int, indices=None, ca
     calculate_mean = True if calculate_mean is None else calculate_mean
     if indices is None:
         # all but the ignored indices
-        indices = [c for c in CLASS_INFO[experiment][1].keys() if not c == 255]
+        # print("SB")
+        indices = [c - 1 for c in CLASS_INFO[experiment][1].keys() if not c == 0]
     else:
         # indices can only be any of the categories of a given experiment
         assert (indices == CLASS_INFO[experiment][2]['anatomies'] or
@@ -316,9 +318,10 @@ def t_get_miou(confusion_matrix: torch.Tensor, experiment: int, indices=None, ca
                 indices == CLASS_INFO[experiment][2]['rare'] or
                 indices == CLASS_INFO[experiment][2]['others']), 'indices must be any of the entries ' \
                                                                  'of {}'.format(CLASS_INFO[experiment][2])
-        indices = [c for c in indices if not c == 255]
+        indices = [c -1 for c in indices if not c == 0]
 
     with torch.no_grad():
+        # print(indices)
         diagonal = confusion_matrix.diag()[indices].to(torch.float)
         row_sum = torch.sum(confusion_matrix, dim=0, dtype=torch.float)[indices]
         col_sum = torch.sum(confusion_matrix, dim=1, dtype=torch.float)[indices]
@@ -336,7 +339,7 @@ def t_get_single_class_iou(confusion_matrix: torch.Tensor, experiment: int, sing
     with torch.no_grad():
         if single_class == 255:
             single_class = confusion_matrix.shape[0] - 1
-        indices = [c for c in CLASS_INFO[experiment][1].keys() if not (c == 255 or c == single_class)]
+        indices = [c - 1for c in CLASS_INFO[experiment][1].keys() if not (c == 0 or c == single_class)]
         tp = confusion_matrix[single_class, single_class]
         fn = torch.sum(confusion_matrix[:, single_class]) - tp
         fp = torch.sum(confusion_matrix[single_class, indices])

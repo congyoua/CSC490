@@ -5,10 +5,10 @@ from models.Projector import Projector
 from torchvision.models import resnet101, resnet50, resnet18, resnet34
 from torchvision.models._utils import IntermediateLayerGetter
 from utils import CLASS_INFO
-
+import timm
 
 class OCRNet(nn.Module):
-    eligible_backbones = ['resnet18', 'resnet34', 'resnet50', 'resnet101']
+    eligible_backbones = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'vit']
 
     # Illustration of OCRNet architecture
     #                                               [General]
@@ -66,7 +66,7 @@ class OCRNet(nn.Module):
                 self.high_out_channels = self.backbone['layer4']._modules['1'].conv2.out_channels
                 self.low_level_channels = self.backbone['layer3']._modules['1'].conv2.out_channels
         else:
-            raise NotImplementedError('HRNet not yet implemented')
+            self.backbone = timm.create_model('resnet50', pretrained=True, num_classes=0, global_pool='')
 
         # maps layer4 features to 512 channels
         self.conv_high_map = nn.Sequential(
@@ -106,11 +106,9 @@ class OCRNet(nn.Module):
 
     def forward(self, x):
         input_resolution = x.shape[-2:]  # input image resolution (H,W)
-
         backbone_features = self.backbone(x)
         # print('high_features {}'.format(backbone_features['high'].size()))
         # print('low_features {}'.format(backbone_features['low'].size()))
-
         intermediate_logits = self.interm_prediction_head(backbone_features['low'])
         # print('intermediate_logits {}'.format(intermediate_logits.size()))
 
@@ -323,9 +321,8 @@ class SpatialOCR_Module(nn.Module):
 
 if __name__ == '__main__':
     config = dict()
-    config.update({'backbone': 'resnet50'})
-    config.update({'out_stride': 16,
-                   'projector': {'mlp': [[1, 256, 1]], 'd': 128}})
+    config.update({'backbone': 'vits'})
+    config.update({'projector': {'mlp': [[1, 256, 1]], 'd': 128}})
     a = torch.ones(size=(1, 3, 540, 960))
     model = OCRNet(config, 2)
     # model.print_params()

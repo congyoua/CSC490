@@ -5,3 +5,4 @@ from .OCRNet_Manager import OCRNetManager
 from .EncDec_Manager import EncDecManager
 from .FCN_Manager import FCNManager
 from .Ensemble_Manager import EnsembleManager
+from .SegFormerManager import SegFormerManager
