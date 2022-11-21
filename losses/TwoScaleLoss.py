@@ -1,7 +1,7 @@
 import torch.nn.functional as F
 import torch.nn as nn
 from utils import CLASS_INFO
-
+from losses import *
 
 class TwoScaleLoss(nn.Module):
     def __init__(self, config):
@@ -12,6 +12,7 @@ class TwoScaleLoss(nn.Module):
         :param config:
         """
         super(TwoScaleLoss, self).__init__()
+        print(globals().keys())
         interm_loss_class = globals()[config['interm']['name']]
         final_loss_class = globals()[config['final']['name']]
         self.w_interm = config['interm']['weight'] if 'weight' in config['interm'] else 0.4
