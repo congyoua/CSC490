@@ -2,8 +2,8 @@
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=63500M
-#SBATCH --time=20:00:00
+#SBATCH --mem=32000M
+#SBATCH --time=16:00:00
 #SBATCH --output=/home/njrttx/scratch/CSC490_OpenYourEyes/presentation_output/OCRNet_rf0.15_lvsz_SOTA.out
 
 echo "Current working directory: pwd"
