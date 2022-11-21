@@ -149,21 +149,8 @@ class SegFormerManager(BaseManager):
                         individual_losses[key] += self.loss.loss_vals[key]
                 else:
                     output = self.model(img)
-                    if isinstance(self.loss, MonaiDiceFocalLoss):
-                        onehot_lbl = lbl[:, None, :, :]
-                        if self.config['data']['experiment'] == 2:
-                            num_class = 17
-                        if self.config['data']['experiment'] == 1:
-                            num_class = 7
-                        if self.config['data']['experiment'] == 3:
-                            num_class = 25
-                        one_hot = torch.zeros(lbl.shape[0], 255, lbl.shape[1], lbl.shape[2]).to(self.device)
-                        one_hot.scatter_(1, onehot_lbl.type(torch.int64), 1)
-                        onehot_lbl = one_hot[:, :num_class]
-                        loss = self.loss(output, onehot_lbl.long())
-                    else:
-                        # print(output.shape, lbl.shape)
-                        valid_loss += self.loss(output, lbl.long()).item()
+                    # print(output.shape, lbl.shape)
+                    valid_loss += self.loss(output, lbl.long()).item()
                 confusion_matrix = t_get_confusion_matrix(output, lbl, confusion_matrix)
 
                 if rec_num in np.round(np.linspace(0, len(self.data_loaders['valid_loader']) - 1, self.max_valid_imgs)):

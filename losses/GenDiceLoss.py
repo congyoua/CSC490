@@ -10,7 +10,7 @@ class GenDiceLoss(nn.Module):
     def __init__(self, config: dict):
         super().__init__()
         self.experiment = config['experiment']
-        self.num_classes = len(CLASS_INFO[self.experiment][1])
+        self.num_classes = len(CLASS_INFO[self.experiment][1]) + 1
         self.weights = config['weights'] if 'weights' in config else None
         self.naive = False if 'naive' not in config else config['naive']
 
