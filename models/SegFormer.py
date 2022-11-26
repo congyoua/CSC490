@@ -26,6 +26,7 @@ class SegFormer(nn.Module):
         self.projector_model = None
 
     def forward(self, x):
+        # print(x.shape)
         lst = []
         for i in range(len(x)):
             lst.append(x[i, ...].cpu())
@@ -33,7 +34,7 @@ class SegFormer(nn.Module):
         outputs = self.model(**encoding)
         return nn.functional.interpolate(
             outputs.logits,
-            size=[544, 960],
+            size=(x.shape[2], x.shape[3]),
             mode="bilinear",
             align_corners=False,
         )
