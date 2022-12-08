@@ -29,7 +29,7 @@ You can visualize the training curve and inference result in tensorboard ``tenso
 Simply run ``python main.py -c configs/presentation/SegFormer_rf_lvsz.json --task 2 -d 0 --data_path "./data/"``. You can change parameters in the config file.
 
 
-## SOTA method
+## Original method
 Pissas et al [1] proposed a publicly available state-of-the-art approach for the CaDis dataset, which uses ResNet50 as the backbone and OCRNet by Yuan et al. [2] as the head, while we seek to make improvement based on their method.
 
 ![OCRNet](https://github.com/HRNet/HRNet-Semantic-Segmentation/blob/HRNet-OCR/figures/OCR.PNG)
@@ -74,6 +74,10 @@ We implemented the model with the original method by Pissas et al. [1] as well a
 | ResNet+OCRNet | Original | 0.748 | **0.860** | 0.759 | 0.716 |
 | Ours | Original | **0.755** | 0.859 | 0.771 | 0.749 |
 | Ours | Trivial | 0.752 | 0.850 | **0.773** | **0.751** |
+
+## Contribution
+
+In this project, Hengda is responsible for exploring and implementing different data augmentation methods. Wentao is responsible for resetting the loss function and helping Hengda with some of the data augmentation. Youan is mainly responsible for designing, building and training the model. Zijin is responsible for analyzing the results and processing the data.
 
 ## Reference
 [1] Pissas, C. (2021). Effective Semantic Segmentation in Cataract Surgery: What Matters Most?. In Medical Image Computing and Computer Assisted Intervention – MICCAI 2021 (pp. 509–518). Springer International Publishing.
