@@ -67,6 +67,7 @@ Lovász-Softmax loss is a method for direct optimization of the mIoU loss in the
 We implemented the model with the original method by Pissas et al. [1] as well as our improved model, where we also tried 2 different data augmentation methods.
 
 ![Segmentation result](https://user-images.githubusercontent.com/76748797/206273552-6e3cdad3-e014-434b-92cc-a40ef50cd5ac.png)
+![Segmentation result2](https://user-images.githubusercontent.com/76748797/206329380-5359d2a0-84a6-48c0-8a65-169167ff6f74.png)
 
 | Architecture  | Data Augmentation | mIoU (All classes) | mIoU (Anatomy) | mIoU (Instruments) | mIoU (Others) |
 | --- | --- | --- | --- | --- | --- |
