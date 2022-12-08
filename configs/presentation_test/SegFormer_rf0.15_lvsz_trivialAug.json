@@ -1,0 +1,26 @@
+{
+  "name": "SegFormer_rf0.15_lvsz_trivialAug_Inference",
+  "mode": "inference",
+  "manager": "SegFormer",
+  "graph": {
+    "model": "SegFormer"
+  },
+
+  "data": {
+    "experiment": 2,
+    "use_relabeled": false,
+    "blacklist": false,
+    "transforms": ["trivialAug"],
+    "split": 2,
+    "batch_size": 8,
+    "repeat_factor": [0],
+    "repeat_factor_freq_thresh": 0.15
+  },
+  "train": {},
+  "load_checkpoint": "20221126_073249_e2__SegFormer_rf0.15_lvsz_trivialAug",
+  "loss": {"name":  "LovaszSoftmax"},
+  "log_every_n_epochs": 10,
+  "cuda": true,
+  "gpu_device": 0,
+  "seed": 0
+}
