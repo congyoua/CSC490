@@ -16,6 +16,7 @@ Reference: https://cataracts.grand-challenge.org/CaDIS/
 
 Download trained model here, and put them under ``logs`` folder.
 
+SegNet + Original Augmentation: https://drive.google.com/file/d/1-ExL9afSM9lgtfjjDH24F8HyRjU9bSlS/view?usp=sharing
 SegNet + TrivialAug: https://drive.google.com/file/d/1E6qiUEeCVniIWANilgDNgPhcWLgzzDvg/view
 
 For model with original augmentation method, run the model with command ``python main.py -c configs/presentation_test/SegFormer_rf0.15_lvsz_50.json --task 2 -d 0 --data_path "./data/"``
