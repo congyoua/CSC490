@@ -10,6 +10,24 @@ The dataset consists of 4670 images in total and includes 36 classes: 29 surgica
 
 Reference: https://cataracts.grand-challenge.org/CaDIS/
 
+## How to run the model?
+
+### Pretrained model
+
+Download trained model here, and put them under ``logs`` folder.
+
+SegNet + TrivialAug: https://drive.google.com/file/d/1E6qiUEeCVniIWANilgDNgPhcWLgzzDvg/view
+
+For model with original augmentation method, run the model with command ``python main.py -c configs/presentation_test/SegFormer_rf0.15_lvsz_50.json --task 2 -d 0 --data_path "./data/"``
+
+For model with trivial augmentation, run the model with command ``python main.py -c configs/presentation_test/SegFormer_rf0.15_lvsz_trivialAug.json --task 2 -d 0 --data_path "./data/"``
+
+You can visualize the training curve and inference result in tensorboard ``tensorboard --logdir logs/[folder_name]``, where ``[folder_name]`` is the downloaded model folder.
+
+### Training model
+
+Simply run ``python main.py -c configs/presentation/SegFormer_rf_lvsz.json --task 2 -d 0 --data_path "./data/"``. You can change parameters in the config file.
+
 
 ## SOTA method
 Pissas et al [1] proposed a publicly available state-of-the-art approach for the CaDis dataset, which uses ResNet50 as the backbone and OCRNet by Yuan et al. [2] as the head, while we seek to make improvement based on their method.
